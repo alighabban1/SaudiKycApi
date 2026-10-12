@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحقق - المنصة الوطنية للتحقق والربط الرقمي</title>
+    <style>
+        :root {
+            --primary-color: #0d3b2e;
+            --accent-color: #006c4c;
+            --bg-color: #f7f9f8;
+            --card-bg: #ffffff;
+            --text-color: #1a2521;
+            --border-radius: 14px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        /* 1. البنر العلوي الشامل مع الشعار المكبّر */
+        .banner-header {
+            width: 100%;
+            height: 320px;
+            background: url('assest/banner.png') center/cover no-repeat;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .logo-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 45px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .logo-container img {
+            height: 200px; /* تكبير حجم الشعار */
+            width: auto;
+            display: block;
+        }
+
+        /* 2. العلامة المائية خلف الخدمات (Watermark) */
+        .main-wrapper {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .main-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('assest/logo.png') center/70% no-repeat;
+            opacity: 0.04; /* نسبة الشفافية للعلامة المائية */
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 3. Hero Section */
+        .hero {
+            text-align: center;
+            padding: 35px 20px 10px;
+        }
+
+        .hero h1 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .hero p {
+            color: #555;
+            max-width: 650px;
+            margin: 0 auto;
+            font-size: 15px;
+        }
+
+        .version-badge {
+            display: inline-block;
+            margin-top: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        /* 4. شبكة الخدمات Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 22px;
+            max-width: 1100px;
+            margin: 25px auto 40px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 22px;
+            box-shadow: var(--shadow);
+            border: 1px solid #e2e8e5;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-header h3 {
+            margin: 0 0 4px 0;
+            font-size: 17px;
+            color: var(--primary-color);
+        }
+
+        .card-header span {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #d0dad5;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 108, 76, 0.12);
+        }
+
+        button {
+            width: 100%;
+            padding: 11px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-color);
+        }
+
+        .result-box {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .success { background-color: #e6f4ea; color: #137333; border: 1px solid #ceead6; }
+        .error { background-color: #fce8e6; color: #c5221f; border: 1px solid #fad2cf; }
+
+        /* 5. الفوتر */
+        footer {
+            background-color: #ffffff;
+            border-top: 1px solid #e2e8e5;
+            padding: 25px 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .footer-disclaimer {
+            color: #d90429;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .made-in-saudi {
+            color: #1b4332;
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- البنر العلوي -->
+    <div class="banner-header">
+        <div class="logo-container">
+            <img src="assest/logo.png" alt="تحقق - الشعار الرسمي">
+        </div>
+    </div>
+
+    <!-- الحاوية الرئيسية مع العلامة المائية -->
+    <div class="main-wrapper">
+        <section class="hero">
+            <h1>تحقق - المنصة الوطنية للتحقق والربط الرقمي</h1>
+            <p>افحص وصادق على صحة الأرقام والبيانات المعيارية للمواطنين والشركات في المملكة العربية السعودية</p>
+            <span class="version-badge">إصدار الشركات v2.0</span>
+        </section>
+
+        <div class="grid-container">
+
+            <!-- 1. الهوية الوطنية / الإقامة -->
+            <div class="card">
+                <div>
+                    <div class="card-header">
+                        <h3>🪪 الهوية الوطنية / الإقامة</h3>
+                        <span>خوارزمية Luhn Algorithm</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="saudiId" placeholder="1100000000">
+                    </div>
+                </div>
+                <div>
+                    <button onclick="checkSaudiId()">فحص الهوية</button>
+                    <div id="idResult" class="result-box"></div>
+                </div>
+            </div>
+
+            <!-- 2. الآيبان البنكي -->
+            <div class="card">
+                <div>
+                    <div class="card-header">
+                        <h3>🏦 الآيبان البنكي (IBAN)</h3>
+                        <span>معيار ISO 7064 مع استخراج البنك</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="iban" placeholder="SA0380000000608010123456">
+                    </div>
+                </div>
+                <div>
+                    <button onclick="checkIban()">فحص الآيبان</button>
+                    <div id="ibanResult" class="result-box"></div>
+                </div>
+            </div>
+
+            <!-- 3. العنوان الوطني المختصر -->
+            <div class="card">
+                <div>
+                    <div class="card-header">
+                        <h3>📍 العنوان الوطني المختصر</h3>
+                        <span>صيغة سُبل (SPL)</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="address" placeholder="RRRD1234">
+                    </div>
+                </div>
+                <div>
+                    <button onclick="checkAddress()">فحص العنوان</button>
+                    <div id="addressResult" class="result-box"></div>
+                </div>
+            </div>
+
+            <!-- 4. الرقم الضريبي (ZATCA) -->
+            <div class="card">
+                <div>
+                    <div class="card-header">
+                        <h3>🧾 الرقم الضريبي (ZATCA)</h3>
+                        <span>معيار هيئة الزكاة والضريبة (15 رقم)</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="tin" placeholder="300000000000003">
+                    </div>
+                </div>
+                <div>
+                    <button onclick="checkTin()">فحص الرقم الضريبي</button>
+                    <div id="tinResult" class="result-box"></div>
+                </div>
+            </div>
+
+            <!-- 5. السجل التجاري -->
+            <div class="card">
+                <div>
+                    <div class="card-header">
+                        <h3>🏢 السجل التجاري (CR)</h3>
+                        <span>معايير وزارة التجارة (10 أرقام)</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="cr" placeholder="1010000000">
+                    </div>
+                </div>
+                <div>
+                    <button onclick="checkCr()">فحص السجل التجاري</button>
+                    <div id="crResult" class="result-box"></div>
+                </div>
+            </div>
+
+            <!-- 6. الجوال + المشغّل -->
+            <div class="card">
+                <div>
+                    <div class="card-header">
+                        <h3>📱 الجوال + المشغّل</h3>
+                        <span>كشف المزود (STC, Mobily, Zain)</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="mobile" placeholder="0512345678">
+                    </div>
+                </div>
+                <div>
+                    <button onclick="checkMobile()">فحص الجوال</button>
+                    <div id="mobileResult" class="result-box"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- الفوتر -->
+    <footer>
+        <div class="footer-disclaimer">
+            ⚠️ تنبيه: يرجى عدم الاعتماد على معلومات هذه المنصة لأغراض رسمية أو قانونية.
+        </div>
+        <div class="made-in-saudi">
+            صُنع في السعودية 🇸🇦
+        </div>
+    </footer>
+
+    <script>
+        async function handleApiCall(endpoint, paramName, inputValue, resultDivId) {
+            const resultDiv = document.getElementById(resultDivId);
+            resultDiv.style.display = 'none';
+
+            if (!inputValue || inputValue.trim() === '') {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result-box error';
+                resultDiv.innerText = '❌ يرجى إدخال القيمة أولاً';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/kyc/${endpoint}?${paramName}=${encodeURIComponent(inputValue.trim())}`);
+                if (!response.ok) throw new Error(`Status: ${response.status}`);
+
+                const data = await response.json();
+                const isValid = data.isValid ?? data.IsValid ?? false;
+                const message = data.message ?? data.Message ?? (isValid ? 'بيانات صحيحة' : 'بيانات غير صحيحة');
+
+                resultDiv.style.display = 'block';
+                resultDiv.className = isValid ? 'result-box success' : 'result-box error';
+                resultDiv.innerText = (isValid ? '✅ ' : '❌ ') + message;
+            } catch (err) {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result-box error';
+                resultDiv.innerText = '❌ خطأ في الاتصال بالسيرفر';
+            }
+        }
+
+        function checkSaudiId() { handleApiCall('validate-id', 'idNumber', document.getElementById('saudiId').value, 'idResult'); }
+        function checkIban() { handleApiCall('validate-iban', 'iban', document.getElementById('iban').value, 'ibanResult'); }
+        function checkAddress() { handleApiCall('validate-address', 'address', document.getElementById('address').value, 'addressResult'); }
+        function checkTin() { handleApiCall('validate-tin', 'tin', document.getElementById('tin').value, 'tinResult'); }
+        function checkCr() { handleApiCall('validate-cr', 'crNumber', document.getElementById('cr').value, 'crResult'); }
+        function checkMobile() { handleApiCall('validate-mobile', 'mobileNumber', document.getElementById('mobile').value, 'mobileResult'); }
+    </script>
+</body>
+</html>
