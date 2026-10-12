@@ -1,22 +1,16 @@
-# 1. Runtime Environment
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 8080
-
-# 2. Build Environment
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["SaudiKycApi.csproj", "./"]
-RUN dotnet restore "SaudiKycApi.csproj"
+
+# Copies everything including the subfolder
 COPY . .
-RUN dotnet build "SaudiKycApi.csproj" -c Release -o /app/build
 
-# 3. Publish
-FROM build AS publish
-RUN dotnet publish "SaudiKycApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
+# Restores and publishes from inside the subfolder
+WORKDIR /src/SaudiKycApi
+RUN dotnet restore
+RUN dotnet publish -c Release -o /app/publish
 
-# 4. Final Image
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
+EXPOSE 8080
 ENTRYPOINT ["dotnet", "SaudiKycApi.dll"]
