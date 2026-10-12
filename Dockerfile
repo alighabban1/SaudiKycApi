@@ -1,14 +1,15 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copies everything including the subfolder
+# نسخ جميع الملفات
 COPY . .
 
-# Restores and publishes from inside the subfolder
+# الانتقال لمجلد المشروع وبناء مشروع الـ API المحدد فقط
 WORKDIR /src/SaudiKycApi
-RUN dotnet restore
-RUN dotnet publish -c Release -o /app/publish
+RUN dotnet restore "SaudiKycApi.csproj"
+RUN dotnet publish "SaudiKycApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
+# بيئة التشغيل النهائية
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
